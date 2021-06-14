@@ -1,0 +1,181 @@
+[gd_scene load_steps=10 format=2]
+
+[ext_resource path="res://sounds/music/bckg_music_forest.mp3" type="AudioStream" id=1]
+[ext_resource path="res://sounds/music/bckg_ambient_forest.mp3" type="AudioStream" id=2]
+[ext_resource path="res://src/actors/player.tscn" type="PackedScene" id=3]
+[ext_resource path="res://artwork/palatka.png" type="Texture" id=4]
+[ext_resource path="res://artwork/Improve.png" type="Texture" id=5]
+[ext_resource path="res://artwork/parallax.png" type="Texture" id=6]
+[ext_resource path="res://icon.png" type="Texture" id=8]
+
+[sub_resource type="Shader" id=1]
+code = "shader_type canvas_item;
+
+// Gonkee's fog shader for Godot 3 - full tutorial https://youtu.be/QEaTsz_0o44
+// If you use this shader, I would prefer it if you gave credit to me and my channel
+
+uniform vec3 color = vec3(0.2, 0.2, 0.2);
+uniform int OCTAVES = 4;
+
+float rand(vec2 coord){
+	return fract(sin(dot(coord, vec2(56, 78)) * 1000.0) * 1000.0);
+}
+
+float noise(vec2 coord){
+	vec2 i = floor(coord);
+	vec2 f = fract(coord);
+
+	// 4 corners of a rectangle surrounding our point
+	float a = rand(i);
+	float b = rand(i + vec2(1.0, 0.0));
+	float c = rand(i + vec2(0.0, 1.0));
+	float d = rand(i + vec2(1.0, 1.0));
+
+	vec2 cubic = f * f * (3.0 - 2.0 * f);
+
+	return mix(a, b, cubic.x) + (c - a) * cubic.y * (1.0 - cubic.x) + (d - b) * cubic.x * cubic.y;
+}
+
+float fbm(vec2 coord){
+	float value = 0.0;
+	float scale = 0.5;
+
+	for(int i = 0; i < OCTAVES; i++){
+		value += noise(coord) * scale;
+		coord *= 2.0;
+		scale *= 0.5;
+	}
+	return value;
+}
+
+void fragment() {
+	vec2 coord = UV * 20.0;
+
+	vec2 motion = vec2( fbm(coord + vec2(TIME * -0.5, TIME * 0.5)) );
+
+	float final = fbm(coord + motion);
+
+	COLOR = vec4(color, final * 0.5);
+}"
+
+[sub_resource type="ShaderMaterial" id=2]
+shader = SubResource( 1 )
+shader_param/color = Vector3( 0.3, 0.3, 0.3 )
+shader_param/OCTAVES = 4
+
+[node name="Forest" type="Node2D"]
+__meta__ = {
+"_edit_horizontal_guides_": [  ]
+}
+
+[node name="CanvasModulate" type="CanvasModulate" parent="."]
+position = Vector2( 54, -21 )
+color = Color( 0.760784, 0.72549, 0.72549, 1 )
+
+[node name="SoundsBackground" type="Node" parent="."]
+
+[node name="BckgMusic" type="AudioStreamPlayer" parent="SoundsBackground"]
+stream = ExtResource( 1 )
+volume_db = -4.0
+pitch_scale = 0.8
+autoplay = true
+
+[node name="BckgAmbient2" type="AudioStreamPlayer" parent="SoundsBackground"]
+stream = ExtResource( 2 )
+volume_db = -15.0
+autoplay = true
+
+[node name="Player" parent="." instance=ExtResource( 3 )]
+position = Vector2( 271, 264 )
+
+[node name="ParallaxBackground" type="ParallaxBackground" parent="."]
+layer = -2
+
+[node name="Lake2" type="ParallaxLayer" parent="ParallaxBackground"]
+position = Vector2( -122, 0 )
+motion_scale = Vector2( 0, 1 )
+
+[node name="icon" type="Sprite" parent="ParallaxBackground/Lake2"]
+material = SubResource( 2 )
+position = Vector2( 236, 104 )
+scale = Vector2( 24.2362, -20.3699 )
+z_index = -3
+z_as_relative = false
+texture = ExtResource( 8 )
+
+[node name="Lake" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2( 0.1, 1 )
+motion_mirroring = Vector2( 5615, 0 )
+
+[node name="Sprite" type="Sprite" parent="ParallaxBackground/Lake"]
+position = Vector2( 0, 236 )
+z_index = 1
+texture = ExtResource( 6 )
+region_enabled = true
+region_rect = Rect2( 115, 3948, 5620, 249 )
+
+[node name="ParallaxLayer1" type="ParallaxLayer" parent="ParallaxBackground"]
+position = Vector2( 0, -34 )
+motion_scale = Vector2( 0.2, 1 )
+motion_mirroring = Vector2( 5615, 0 )
+
+[node name="Sprite" type="Sprite" parent="ParallaxBackground/ParallaxLayer1"]
+position = Vector2( 0, 28 )
+texture = ExtResource( 6 )
+region_enabled = true
+region_rect = Rect2( 115, 3333, 5421, 508 )
+
+[node name="ParallaxLayer2" type="ParallaxLayer" parent="ParallaxBackground"]
+motion_scale = Vector2( 0.3, 1 )
+motion_mirroring = Vector2( 5615, 0 )
+
+[node name="Sprite" type="Sprite" parent="ParallaxBackground/ParallaxLayer2"]
+texture = ExtResource( 6 )
+region_enabled = true
+region_rect = Rect2( 116, 2772, 5619, 508 )
+
+[node name="ParallaxLayer3" type="ParallaxLayer" parent="ParallaxBackground"]
+position = Vector2( 0, -129 )
+motion_mirroring = Vector2( 5615, 0 )
+
+[node name="Sprite" type="Sprite" parent="ParallaxBackground/ParallaxLayer3"]
+position = Vector2( 0, 115 )
+texture = ExtResource( 6 )
+region_enabled = true
+region_rect = Rect2( 122, 1953, 5639, 660 )
+
+[node name="CanvasModulate" type="CanvasModulate" parent="ParallaxBackground"]
+color = Color( 0.596078, 0.529412, 0.529412, 1 )
+
+[node name="ParallaxForeground" type="ParallaxBackground" parent="."]
+layer = 0
+
+[node name="ParallaxLayer4" type="ParallaxLayer" parent="ParallaxForeground"]
+z_index = 1
+motion_scale = Vector2( 2, 1 )
+motion_mirroring = Vector2( 5615, 0 )
+
+[node name="Sprite" type="Sprite" parent="ParallaxForeground/ParallaxLayer4"]
+position = Vector2( 0, 104 )
+texture = ExtResource( 6 )
+region_enabled = true
+region_rect = Rect2( 107, 1068, 5619, 708 )
+
+[node name="decor_objects" type="Node2D" parent="."]
+
+[node name="palatka" type="Sprite" parent="decor_objects"]
+position = Vector2( 548, 354 )
+z_index = -1
+texture = ExtResource( 4 )
+offset = Vector2( -32, -169 )
+
+[node name="kotelok" type="Sprite" parent="decor_objects"]
+position = Vector2( 196, 222 )
+z_index = -1
+texture = ExtResource( 5 )
+region_enabled = true
+region_rect = Rect2( 1391, 789, 71, 57 )
+
+[node name="collide_objects" type="Node2D" parent="."]
+
+[node name="interact_objects" type="Node2D" parent="."]

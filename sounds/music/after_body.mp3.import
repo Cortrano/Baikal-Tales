@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/after_body.mp3-8796e699aa078dedd9107fac6dbdc50b.mp3str"
+
+[deps]
+
+source_file="res://sounds/music/after_body.mp3"
+dest_files=[ "res://.import/after_body.mp3-8796e699aa078dedd9107fac6dbdc50b.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0

@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/bckg_music_forest.mp3-086f1a19dc21d2233e0ae50b79e25a26.mp3str"
+
+[deps]
+
+source_file="res://sounds/music/bckg_music_forest.mp3"
+dest_files=[ "res://.import/bckg_music_forest.mp3-086f1a19dc21d2233e0ae50b79e25a26.mp3str" ]
+
+[params]
+
+loop=true
+loop_offset=0
