@@ -1,0 +1,15 @@
+{
+	"events": [
+		{
+			"character": "character-1623871770.json",
+			"event_id": "dialogic_001",
+			"portrait": "",
+			"text": "Привет, странник, ты чего-то хотел?"
+		}
+	],
+	"metadata": {
+		"dialogic-version": "1.2",
+		"file": "timeline-1623872672.json",
+		"name": "mihail1"
+	}
+}
