@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=2]
 
-[ext_resource path="res://ui/Kkk.png" type="Texture" id=1]
-[ext_resource path="res://fonts/perfectDOSVGA437-meduium-48.tres" type="DynamicFont" id=2]
+[ext_resource path="res://ui/button.png" type="Texture" id=1]
+[ext_resource path="res://fonts/perfectDOSVGA437-48.tres" type="DynamicFont" id=2]
 [ext_resource path="res://src/prefabs/menus/menu_button.gd" type="Script" id=3]
 
 [node name="MenuButton" type="TextureButton"]
@@ -21,10 +21,10 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -172.0
-margin_top = -67.5
-margin_right = 172.0
-margin_bottom = 67.5
+margin_left = -152.0
+margin_top = -42.5
+margin_right = 160.0
+margin_bottom = 47.5
 custom_fonts/font = ExtResource( 2 )
 text = "Label"
 align = 1

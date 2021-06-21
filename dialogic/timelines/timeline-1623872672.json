@@ -5,11 +5,60 @@
 			"event_id": "dialogic_001",
 			"portrait": "",
 			"text": "Привет, странник, ты чего-то хотел?"
+		},
+		{
+			"character": "character-1623933989.json",
+			"event_id": "dialogic_001",
+			"portrait": "",
+			"text": "Где я очутился?"
+		},
+		{
+			"character": "character-1623871770.json",
+			"event_id": "dialogic_010",
+			"options": [
+
+			],
+			"portrait": "",
+			"question": "Ты в окраинах Байкала, недалеко от деревни Н. Ты разве ничего не помнишь?"
+		},
+		{
+			"choice": "Что-то припоминаю",
+			"condition": "",
+			"definition": "",
+			"event_id": "dialogic_011",
+			"value": ""
+		},
+		{
+			"character": "character-1623871770.json",
+			"event_id": "dialogic_001",
+			"portrait": "",
+			"text": "Если что обращайся"
+		},
+		{
+			"event_id": "dialogic_022",
+			"transition_duration": 0.5
+		},
+		{
+			"choice": "Нет",
+			"condition": "",
+			"definition": "",
+			"event_id": "dialogic_011",
+			"value": ""
+		},
+		{
+			"character": "character-1623871770.json",
+			"event_id": "dialogic_001",
+			"portrait": "",
+			"text": "Сходи в деревню, возможно освежишь память"
+		},
+		{
+			"event_id": "dialogic_022",
+			"transition_duration": 0.5
 		}
 	],
 	"metadata": {
 		"dialogic-version": "1.2",
 		"file": "timeline-1623872672.json",
-		"name": "mihail1"
+		"name": "timeline1"
 	}
 }

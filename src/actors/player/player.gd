@@ -26,4 +26,9 @@ func _physics_process(delta):
 		motion.x = 0
 		$AnimationPlayer.stop()
 	motion = move_and_slide(motion, Vector2(0,0))
+	
+func set_active(active):
+	set_physics_process(active)
+	set_process(active)
+	set_process_input(active)
 

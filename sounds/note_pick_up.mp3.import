@@ -11,5 +11,5 @@ dest_files=[ "res://.import/note_pick_up.mp3-4af2867a321aa25296502278ce0e2809.mp
 
 [params]
 
-loop=true
+loop=false
 loop_offset=0

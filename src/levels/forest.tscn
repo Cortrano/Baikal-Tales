@@ -1,15 +1,16 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=15 format=2]
 
 [ext_resource path="res://sounds/music/bckg_music_forest.mp3" type="AudioStream" id=1]
 [ext_resource path="res://sounds/music/bckg_ambient_forest.mp3" type="AudioStream" id=2]
-[ext_resource path="res://src/actors/player.tscn" type="PackedScene" id=3]
+[ext_resource path="res://src/actors/player/player.tscn" type="PackedScene" id=3]
 [ext_resource path="res://artwork/palatka.png" type="Texture" id=4]
 [ext_resource path="res://artwork/assets.png" type="Texture" id=5]
 [ext_resource path="res://artwork/parallax.png" type="Texture" id=6]
-[ext_resource path="res://artwork/kopatych.png" type="Texture" id=7]
+[ext_resource path="res://src/actors/kopatych/kopatych.tscn" type="PackedScene" id=7]
 [ext_resource path="res://icon.png" type="Texture" id=8]
-[ext_resource path="res://artwork/note.png" type="Texture" id=9]
-[ext_resource path="res://addons/dialogic/Dialog.tscn" type="PackedScene" id=10]
+[ext_resource path="res://src/prefabs/note.tscn" type="PackedScene" id=9]
+[ext_resource path="res://ui/dialog.png" type="Texture" id=10]
+[ext_resource path="res://fonts/progresspixel-bold.ttf" type="DynamicFontData" id=12]
 
 [sub_resource type="Shader" id=1]
 code = "shader_type canvas_item;
@@ -65,17 +66,14 @@ void fragment() {
 shader = SubResource( 1 )
 shader_param/color = Vector3( 0.3, 0.3, 0.3 )
 
+[sub_resource type="DynamicFont" id=3]
+size = 20
+font_data = ExtResource( 12 )
+
 [node name="Forest" type="Node2D"]
 __meta__ = {
 "_edit_horizontal_guides_": [  ]
 }
-
-[node name="DialogNode" parent="." instance=ExtResource( 10 )]
-margin_left = 13.9301
-margin_top = 148.947
-margin_right = 13.9301
-margin_bottom = 148.947
-timeline = "timeline-1623872672.json"
 
 [node name="ColorCorrection" type="CanvasModulate" parent="."]
 position = Vector2( 54, -21 )
@@ -85,17 +83,18 @@ color = Color( 0.623529, 0.596078, 0.596078, 1 )
 
 [node name="BckgMusic" type="AudioStreamPlayer" parent="SoundsBackground"]
 stream = ExtResource( 1 )
-volume_db = -4.0
+volume_db = -15.0
 pitch_scale = 0.8
 autoplay = true
 
 [node name="BckgAmbient2" type="AudioStreamPlayer" parent="SoundsBackground"]
 stream = ExtResource( 2 )
-volume_db = -15.0
+volume_db = -22.0
 autoplay = true
 
 [node name="Player" parent="." instance=ExtResource( 3 )]
-position = Vector2( 271, 264 )
+position = Vector2( -1161.88, 172.647 )
+speed = 120
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="."]
 layer = -2
@@ -190,11 +189,42 @@ region_rect = Rect2( 1391, 789, 71, 57 )
 [node name="interact_objects" type="Node2D" parent="."]
 z_index = -1
 
-[node name="note" type="Sprite" parent="interact_objects"]
-position = Vector2( -519.67, 133.836 )
-scale = Vector2( 0.0505291, 0.0505291 )
-texture = ExtResource( 9 )
+[node name="note" parent="interact_objects" instance=ExtResource( 9 )]
+position = Vector2( -519.713, 150.89 )
 
-[node name="kopatych" type="Sprite" parent="."]
-position = Vector2( 362.565, 174.414 )
-texture = ExtResource( 7 )
+[node name="Kopatych" parent="." instance=ExtResource( 7 )]
+position = Vector2( 296.783, 168.244 )
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="NoteCanvas" type="NinePatchRect" parent="UI"]
+visible = false
+margin_left = 59.5231
+margin_top = 70.6206
+margin_right = 443.523
+margin_bottom = 636.621
+texture = ExtResource( 10 )
+region_rect = Rect2( 23.9391, 25.5505, 785.693, 210.529 )
+patch_margin_left = 25
+patch_margin_top = 25
+patch_margin_right = 25
+patch_margin_bottom = 24
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RichTextLabel" type="RichTextLabel" parent="UI/NoteCanvas"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = 15.0
+margin_top = 15.0
+margin_right = -15.0
+margin_bottom = -15.0
+custom_fonts/normal_font = SubResource( 3 )
+custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
+custom_constants/shadow_offset_x = 1
+custom_constants/shadow_offset_y = 2
+text = "День 2. Я все еще не понимаю где мы находимся. Кругом творится какая-то чертовщина, звуки отовсюду, туман который пахнет страхом... "
+__meta__ = {
+"_edit_use_anchors_": false
+}

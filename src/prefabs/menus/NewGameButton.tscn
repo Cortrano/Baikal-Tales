@@ -6,4 +6,8 @@
 scene_to_load = "res://src/levels/forest.tscn"
 
 [node name="Label" parent="." index="0"]
+margin_left = -148.06
+margin_top = -39.4694
+margin_right = 163.94
+margin_bottom = 50.5306
 text = "Играть"
