@@ -1,18 +1,68 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=34 format=2]
 
 [ext_resource path="res://sounds/music/bckg_music_forest.mp3" type="AudioStream" id=1]
 [ext_resource path="res://sounds/music/bckg_ambient_forest.mp3" type="AudioStream" id=2]
 [ext_resource path="res://src/actors/player/player.tscn" type="PackedScene" id=3]
 [ext_resource path="res://artwork/palatka.png" type="Texture" id=4]
 [ext_resource path="res://artwork/assets.png" type="Texture" id=5]
-[ext_resource path="res://artwork/parallax.png" type="Texture" id=6]
-[ext_resource path="res://src/actors/kopatych/kopatych.tscn" type="PackedScene" id=7]
+[ext_resource path="res://artwork/forest.png" type="Texture" id=6]
+[ext_resource path="res://src/levels/monologArea2.gd" type="Script" id=7]
 [ext_resource path="res://icon.png" type="Texture" id=8]
 [ext_resource path="res://src/prefabs/note.tscn" type="PackedScene" id=9]
 [ext_resource path="res://ui/dialog.png" type="Texture" id=10]
+[ext_resource path="res://fonts/monogram.ttf" type="DynamicFontData" id=11]
 [ext_resource path="res://fonts/progresspixel-bold.ttf" type="DynamicFontData" id=12]
+[ext_resource path="res://src/prefabs/menus/ExitToMainButton.tscn" type="PackedScene" id=14]
+[ext_resource path="res://src/prefabs/menus/ResumeButton.tscn" type="PackedScene" id=15]
+[ext_resource path="res://sounds/click_menu.wav" type="AudioStream" id=16]
+[ext_resource path="res://src/levels/Pause.gd" type="Script" id=17]
+[ext_resource path="res://src/levels/miniGame.tscn" type="PackedScene" id=18]
+[ext_resource path="res://src/shaders/vignette.shader" type="Shader" id=19]
+[ext_resource path="res://src/shaders/vignette.png" type="Texture" id=20]
 
-[sub_resource type="Shader" id=1]
+[sub_resource type="RectangleShape2D" id=24]
+extents = Vector2( 51.7911, 126.361 )
+
+[sub_resource type="ShaderMaterial" id=25]
+shader = ExtResource( 19 )
+shader_param/debanding_dither = 0.0
+shader_param/blur = 0.1
+shader_param/vignette_darkness = 0.06
+shader_param/vignette = ExtResource( 20 )
+
+[sub_resource type="Shader" id=26]
+code = "
+shader_type canvas_item;
+
+uniform float offset = 1f;
+
+void fragment(){
+	vec4 green_channel = texture(SCREEN_TEXTURE, SCREEN_UV);
+	vec4 red_channel = texture(SCREEN_TEXTURE, vec2(SCREEN_UV.x + (offset * SCREEN_PIXEL_SIZE.x), SCREEN_UV.y));
+	vec4 blue_channel = texture(SCREEN_TEXTURE, vec2(SCREEN_UV.x - (offset * SCREEN_PIXEL_SIZE.x), SCREEN_UV.y));
+	COLOR = vec4(red_channel.r, green_channel.g, blue_channel.b, 1f);
+}"
+
+[sub_resource type="ShaderMaterial" id=27]
+shader = SubResource( 26 )
+shader_param/offset = 1.25
+
+[sub_resource type="Shader" id=28]
+code = "shader_type canvas_item;
+
+const vec3 color = vec3(0, 0, 0);
+
+void fragment() {
+	COLOR = vec4(color, 1);
+}"
+
+[sub_resource type="ShaderMaterial" id=29]
+shader = SubResource( 28 )
+
+[sub_resource type="Theme" id=30]
+/colors/ = Color( 0, 0, 0, 1 )
+
+[sub_resource type="Shader" id=31]
 code = "shader_type canvas_item;
 
 // Gonkee's fog shader for Godot 3 - full tutorial https://youtu.be/QEaTsz_0o44
@@ -62,13 +112,64 @@ void fragment() {
 	COLOR = vec4(color, final * 0.5);
 }"
 
-[sub_resource type="ShaderMaterial" id=2]
-shader = SubResource( 1 )
+[sub_resource type="ShaderMaterial" id=32]
+shader = SubResource( 31 )
 shader_param/color = Vector3( 0.3, 0.3, 0.3 )
 
-[sub_resource type="DynamicFont" id=3]
+[sub_resource type="DynamicFont" id=33]
 size = 20
 font_data = ExtResource( 12 )
+
+[sub_resource type="Shader" id=10]
+code = "shader_type canvas_item;
+
+uniform float value: hint_range(0, 100); // %
+uniform float thickness: hint_range(0, 100) = 30.; // % thickness
+uniform sampler2D fg: hint_albedo;
+uniform sampler2D bg: hint_black_albedo;
+uniform float offset: hint_range(0, 100); // %
+uniform float smoothing: hint_range(0, 100) = 5.;
+
+void fragment() {
+	vec2 point = UV - vec2(0.5);
+	float PI = 3.14159265358979323846;
+	float ang = (1. - atan(point.x, point.y) / PI) * 50. - offset;
+	if (ang < 0.)
+		ang += 100.;
+	float s = smoothing / 1000.;
+	float k = PI / 2. / s;
+	float r1 = .5 - thickness / 200.;
+	float r2 = .5;
+	float r = length(point);
+	float uy = (r2 - r) / (r2 - r1);
+	if (r > r2 || r < r1)
+		COLOR.a = 0.;
+	else {
+		if (ang <= value) 
+			COLOR = texture(fg, vec2(ang / 100., uy));
+		else
+			COLOR = texture(bg, vec2(ang / 100., uy));
+		if ((r2 - r) < s)
+			COLOR.a = sin((r2 - r) * k);
+		if ((r - r1) < s)
+			COLOR.a = sin((r - r1) * k);
+	}
+}"
+
+[sub_resource type="ShaderMaterial" id=34]
+shader = SubResource( 10 )
+shader_param/value = 0.0
+shader_param/thickness = 18.602
+shader_param/offset = 0.0
+shader_param/smoothing = 0.0
+
+[sub_resource type="RectangleShape2D" id=22]
+extents = Vector2( 126.133, 37.3396 )
+
+[sub_resource type="DynamicFont" id=23]
+size = 64
+outline_size = 2
+font_data = ExtResource( 11 )
 
 [node name="Forest" type="Node2D"]
 __meta__ = {
@@ -79,22 +180,88 @@ __meta__ = {
 position = Vector2( 54, -21 )
 color = Color( 0.623529, 0.596078, 0.596078, 1 )
 
+[node name="StaticBody2D" type="StaticBody2D" parent="."]
+position = Vector2( -1323.13, 172.647 )
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D"]
+shape = SubResource( 24 )
+
 [node name="SoundsBackground" type="Node" parent="."]
 
 [node name="BckgMusic" type="AudioStreamPlayer" parent="SoundsBackground"]
+pause_mode = 2
 stream = ExtResource( 1 )
 volume_db = -15.0
 pitch_scale = 0.8
 autoplay = true
 
 [node name="BckgAmbient2" type="AudioStreamPlayer" parent="SoundsBackground"]
+pause_mode = 2
 stream = ExtResource( 2 )
 volume_db = -22.0
 autoplay = true
 
 [node name="Player" parent="." instance=ExtResource( 3 )]
 position = Vector2( -1161.88, 172.647 )
-speed = 120
+
+[node name="Camera2D" type="Camera2D" parent="Player"]
+position = Vector2( 3.66693, -138.272 )
+current = true
+smoothing_enabled = true
+smoothing_speed = 4.0
+
+[node name="Vignette" type="CanvasLayer" parent="Player/Camera2D"]
+
+[node name="ColorRect" type="ColorRect" parent="Player/Camera2D/Vignette"]
+material = SubResource( 25 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 1.0
+margin_right = 1.0
+margin_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": true
+}
+
+[node name="ChromaticAberration" type="CanvasLayer" parent="Player/Camera2D"]
+
+[node name="ColorRect" type="ColorRect" parent="Player/Camera2D/ChromaticAberration"]
+material = SubResource( 27 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 1.0
+margin_right = 1.0
+margin_bottom = 1.0
+rect_pivot_offset = Vector2( -696.238, 785.158 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PanelBottom" type="Panel" parent="Player/Camera2D"]
+material = SubResource( 29 )
+margin_left = -863.0
+margin_top = 270.038
+margin_right = 467.0
+margin_bottom = 498.038
+rect_scale = Vector2( 1.32, 0.92857 )
+rect_pivot_offset = Vector2( 512.936, 75.3163 )
+theme = SubResource( 30 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="PanelBottom2" type="Panel" parent="Player/Camera2D"]
+material = SubResource( 29 )
+margin_left = -859.61
+margin_top = -558.649
+margin_right = 470.39
+margin_bottom = -270.649
+rect_scale = Vector2( 1.32, 0.92857 )
+rect_pivot_offset = Vector2( 512.936, 75.3163 )
+theme = SubResource( 30 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="."]
 layer = -2
@@ -104,7 +271,7 @@ position = Vector2( -122, 0 )
 motion_scale = Vector2( 0, 1 )
 
 [node name="icon" type="Sprite" parent="ParallaxBackground/Fog"]
-material = SubResource( 2 )
+material = SubResource( 32 )
 position = Vector2( 236, 104 )
 scale = Vector2( 24.2362, -20.3699 )
 z_index = -3
@@ -192,9 +359,6 @@ z_index = -1
 [node name="note" parent="interact_objects" instance=ExtResource( 9 )]
 position = Vector2( -519.713, 150.89 )
 
-[node name="Kopatych" parent="." instance=ExtResource( 7 )]
-position = Vector2( 296.783, 168.244 )
-
 [node name="UI" type="CanvasLayer" parent="."]
 
 [node name="NoteCanvas" type="NinePatchRect" parent="UI"]
@@ -220,7 +384,7 @@ margin_left = 15.0
 margin_top = 15.0
 margin_right = -15.0
 margin_bottom = -15.0
-custom_fonts/normal_font = SubResource( 3 )
+custom_fonts/normal_font = SubResource( 33 )
 custom_colors/font_color_shadow = Color( 0, 0, 0, 1 )
 custom_constants/shadow_offset_x = 1
 custom_constants/shadow_offset_y = 2
@@ -228,3 +392,79 @@ text = "День 2. Я все еще не понимаю где мы наход�
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="Pause" type="VBoxContainer" parent="UI"]
+pause_mode = 2
+visible = false
+margin_left = 117.737
+margin_top = 31.5417
+margin_right = 1157.74
+margin_bottom = 695.541
+custom_constants/separation = 30
+alignment = 1
+script = ExtResource( 17 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Buttons" type="VBoxContainer" parent="UI/Pause"]
+margin_top = 204.0
+margin_right = 1040.0
+margin_bottom = 459.0
+custom_constants/separation = -15
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="ResumeButton" parent="UI/Pause/Buttons" instance=ExtResource( 15 )]
+margin_right = 1040.0
+
+[node name="ExitToMainButton" parent="UI/Pause/Buttons" instance=ExtResource( 14 )]
+margin_top = 120.0
+margin_right = 1040.0
+margin_bottom = 255.0
+
+[node name="icon" type="Sprite" parent="."]
+material = SubResource( 34 )
+position = Vector2( -2377.64, 577.097 )
+texture = ExtResource( 8 )
+
+[node name="corpse_1" type="Sprite" parent="icon"]
+position = Vector2( 1614.51, -413.426 )
+scale = Vector2( 3.10224, 3.10224 )
+
+[node name="MenuClick" type="AudioStreamPlayer" parent="."]
+pause_mode = 2
+stream = ExtResource( 16 )
+pitch_scale = 1.7
+
+[node name="MiniGame" parent="." instance=ExtResource( 18 )]
+visible = false
+position = Vector2( -1151.85, 57.3887 )
+
+[node name="monologArea" type="Area2D" parent="."]
+position = Vector2( 409.126, 103.61 )
+script = ExtResource( 7 )
+monolog = "dev"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="monologArea"]
+position = Vector2( 0, 74.6705 )
+shape = SubResource( 22 )
+
+[node name="QuestionMark" type="Label" parent="monologArea"]
+visible = false
+margin_left = -10.1744
+margin_top = -149.504
+margin_right = 13.8256
+margin_bottom = -98.5038
+custom_fonts/font = SubResource( 23 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+text = "?"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[connection signal="body_entered" from="monologArea" to="monologArea" method="_on_monologArea_body_entered"]

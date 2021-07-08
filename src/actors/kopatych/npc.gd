@@ -19,6 +19,7 @@ func _input(event):
 func unpause(_timeline_name):
 	get_tree().get_root().find_node("Player", true, false).set_active(true)
 	set_process_input(true)
+	Status.dialogedWithNpc = true
 #	get_tree().paused = false
 	
 func _on_Area2D_body_entered(body):

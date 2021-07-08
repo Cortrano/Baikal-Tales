@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=2]
 
-[ext_resource path="res://artwork/kopatych.png" type="Texture" id=1]
+[ext_resource path="res://artwork/actors/kopatych.png" type="Texture" id=1]
 [ext_resource path="res://fonts/monogram.ttf" type="DynamicFontData" id=2]
 [ext_resource path="res://src/actors/kopatych/npc.gd" type="Script" id=3]
 

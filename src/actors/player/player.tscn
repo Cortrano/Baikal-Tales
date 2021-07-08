@@ -1,50 +1,9 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=5 format=2]
 
-[ext_resource path="res://src/shaders/vignette.png" type="Texture" id=1]
-[ext_resource path="res://src/shaders/vignette.shader" type="Shader" id=2]
-[ext_resource path="res://artwork/actor_walk.png" type="Texture" id=3]
+[ext_resource path="res://artwork/actors/actor_walk.png" type="Texture" id=3]
 [ext_resource path="res://src/actors/player/player.gd" type="Script" id=4]
 
-[sub_resource type="Shader" id=1]
-code = "shader_type canvas_item;
-
-const vec3 color = vec3(0, 0, 0);
-
-void fragment() {
-	COLOR = vec4(color, 1);
-}"
-
-[sub_resource type="ShaderMaterial" id=2]
-shader = SubResource( 1 )
-
-[sub_resource type="Theme" id=3]
-/colors/ = Color( 0, 0, 0, 1 )
-
-[sub_resource type="ShaderMaterial" id=4]
-shader = ExtResource( 2 )
-shader_param/debanding_dither = 0.0
-shader_param/blur = 0.1
-shader_param/vignette_darkness = 0.06
-shader_param/vignette = ExtResource( 1 )
-
-[sub_resource type="Shader" id=5]
-code = "
-shader_type canvas_item;
-
-uniform float offset = 1f;
-
-void fragment(){
-	vec4 green_channel = texture(SCREEN_TEXTURE, SCREEN_UV);
-	vec4 red_channel = texture(SCREEN_TEXTURE, vec2(SCREEN_UV.x + (offset * SCREEN_PIXEL_SIZE.x), SCREEN_UV.y));
-	vec4 blue_channel = texture(SCREEN_TEXTURE, vec2(SCREEN_UV.x - (offset * SCREEN_PIXEL_SIZE.x), SCREEN_UV.y));
-	COLOR = vec4(red_channel.r, green_channel.g, blue_channel.b, 1f);
-}"
-
-[sub_resource type="ShaderMaterial" id=6]
-shader = SubResource( 5 )
-shader_param/offset = 1.25
-
-[sub_resource type="Animation" id=9]
+[sub_resource type="Animation" id=1]
 length = 0.96
 loop = true
 step = 0.12
@@ -61,77 +20,20 @@ tracks/0/keys = {
 "values": [ 0, 2, 3, 4, 0 ]
 }
 
-[sub_resource type="RectangleShape2D" id=8]
+[sub_resource type="RectangleShape2D" id=2]
 extents = Vector2( 22.4379, 83.3916 )
 
 [node name="Player" type="KinematicBody2D"]
+position = Vector2( -2642.85, -407.753 )
 script = ExtResource( 4 )
-
-[node name="Camera2D" type="Camera2D" parent="."]
-position = Vector2( 0, -90 )
-current = true
-smoothing_enabled = true
-smoothing_speed = 4.0
-
-[node name="PanelTop" type="Panel" parent="Camera2D"]
-material = SubResource( 2 )
-margin_left = -511.769
-margin_top = -406.638
-margin_right = 515.231
-margin_bottom = -257.638
-rect_scale = Vector2( 1.32, 0.92857 )
-rect_pivot_offset = Vector2( 512.936, 75.3163 )
-theme = SubResource( 3 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="PanelBottom" type="Panel" parent="Camera2D"]
-material = SubResource( 2 )
-margin_left = -511.769
-margin_top = 241.664
-margin_right = 515.231
-margin_bottom = 390.664
-rect_scale = Vector2( 1.32, 0.92857 )
-rect_pivot_offset = Vector2( 512.936, 75.3163 )
-theme = SubResource( 3 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="Vignette" type="CanvasLayer" parent="Camera2D"]
-
-[node name="ColorRect" type="ColorRect" parent="Camera2D/Vignette"]
-material = SubResource( 4 )
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_top = 1.0
-margin_right = 1.0
-margin_bottom = 1.0
-__meta__ = {
-"_edit_use_anchors_": true
-}
-
-[node name="ChromaticAberration" type="CanvasLayer" parent="Camera2D"]
-
-[node name="ColorRect" type="ColorRect" parent="Camera2D/ChromaticAberration"]
-material = SubResource( 6 )
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_top = 1.0
-margin_right = 1.0
-margin_bottom = 1.0
-rect_pivot_offset = Vector2( -696.238, 785.158 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+speed = 130
 
 [node name="Sprite" type="Sprite" parent="."]
 texture = ExtResource( 3 )
 hframes = 5
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-anims/player_walk = SubResource( 9 )
+anims/player_walk = SubResource( 1 )
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-shape = SubResource( 8 )
+shape = SubResource( 2 )
