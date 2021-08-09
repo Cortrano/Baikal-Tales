@@ -1,0 +1,47 @@
+{
+	"events": [
+		{
+			"character": "character-1625151905.json",
+			"event_id": "dialogic_001",
+			"portrait": "",
+			"text": "Внучек, уже проснулся? Пойдём, уже вечер близится, покушать надо бы."
+		},
+		{
+			"character": "character-1623933989.json",
+			"event_id": "dialogic_001",
+			"portrait": "",
+			"text": "Бабуль, кто вы? Я вас знаю?"
+		},
+		{
+			"character": "character-1625151905.json",
+			"event_id": "dialogic_001",
+			"portrait": "",
+			"text": "Что ж это?! Свою бабушку не помнишь? Видать сильно ты ушибся вчера. Петрович тебя тащил со дна оврага."
+		},
+		{
+			"audio": "play",
+			"audio_bus": "Master",
+			"event_id": "dialogic_030",
+			"event_name": "AudioEvent",
+			"file": "res://sounds/heartbeat.mp3",
+			"volume": -10
+		},
+		{
+			"character": "character-1623933989.json",
+			"event_id": "dialogic_001",
+			"portrait": "",
+			"text": "Не… могу вспомнить…"
+		},
+		{
+			"character": "character-1625151905.json",
+			"event_id": "dialogic_001",
+			"portrait": "",
+			"text": "Ничего, скоро оклемаешься"
+		}
+	],
+	"metadata": {
+		"dialogic-version": "1.2",
+		"file": "timeline-1625151888.json",
+		"name": "grandma"
+	}
+}

@@ -1,0 +1,54 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://src/actors/grandma/grandma.gd" type="Script" id=1]
+[ext_resource path="res://fonts/monogram.ttf" type="DynamicFontData" id=2]
+[ext_resource path="res://artwork/actors/Govorit1.png" type="Texture" id=3]
+
+[sub_resource type="RectangleShape2D" id=1]
+extents = Vector2( 59.3082, 80.0946 )
+
+[sub_resource type="DynamicFont" id=2]
+size = 64
+outline_size = 2
+font_data = ExtResource( 2 )
+
+[sub_resource type="RectangleShape2D" id=3]
+extents = Vector2( 37.2653, 79.8412 )
+
+[node name="Grandma" type="KinematicBody2D"]
+scale = Vector2( -1, 1 )
+script = ExtResource( 1 )
+
+[node name="Sprite" type="Sprite" parent="."]
+texture = ExtResource( 3 )
+region_enabled = true
+region_rect = Rect2( 45, 5, 73, 171 )
+
+[node name="Area2D" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Area2D"]
+position = Vector2( 0, 14.4419 )
+shape = SubResource( 1 )
+
+[node name="QuestionMark" type="Label" parent="."]
+margin_left = 0.897381
+margin_top = -153.161
+margin_right = 24.8974
+margin_bottom = -102.161
+rect_scale = Vector2( -1, 1 )
+custom_fonts/font = SubResource( 2 )
+custom_colors/font_color = Color( 1, 1, 1, 1 )
+custom_colors/font_outline_modulate = Color( 0, 0, 0, 1 )
+text = "?"
+align = 1
+valign = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2( 0, 14.9487 )
+shape = SubResource( 3 )
+
+[connection signal="body_entered" from="Area2D" to="." method="_on_Area2D_body_entered"]
+[connection signal="body_exited" from="Area2D" to="." method="_on_Area2D_body_exited"]

@@ -1,0 +1,31 @@
+{
+	"events": [
+		{
+			"character": "character-1623933989.json",
+			"event_id": "dialogic_001",
+			"portrait": "",
+			"text": "Боже мой... Что за чертовщина???"
+		},
+		{
+			"character": "character-1623933989.json",
+			"event_id": "dialogic_001",
+			"portrait": "",
+			"text": "Здесь происходит что-то странное. Осторожность ночью мне точно не повредит."
+		},
+		{
+			"character": "character-1623933989.json",
+			"event_id": "dialogic_001",
+			"portrait": "",
+			"text": "Сейчас нужно собрать больше информации. Осмотрюсь снаружи."
+		},
+		{
+			"event_id": "dialogic_022",
+			"transition_duration": 0.5
+		}
+	],
+	"metadata": {
+		"dialogic-version": "1.2",
+		"file": "timeline-1625149225.json",
+		"name": "skeleton"
+	}
+}

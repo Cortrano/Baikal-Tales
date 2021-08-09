@@ -1,0 +1,31 @@
+{
+	"events": [
+		{
+			"character": "character-1625151356.json",
+			"event_id": "dialogic_001",
+			"portrait": "",
+			"text": "На данный момент это всё что есть в демо-версии игры"
+		},
+		{
+			"character": "character-1625151356.json",
+			"event_id": "dialogic_001",
+			"portrait": "",
+			"text": "В дальнейшем планируется добавить множество механик и локаций"
+		},
+		{
+			"character": "character-1625151356.json",
+			"event_id": "dialogic_001",
+			"portrait": "",
+			"text": "Надеемся что вам понравилась атмосфера байкала, которую мы всеми силами пытались воссоздать"
+		},
+		{
+			"change_scene": "res://src/levels/menu.tscn",
+			"event_id": "dialogic_041"
+		}
+	],
+	"metadata": {
+		"dialogic-version": "1.2",
+		"file": "timeline-1625151270.json",
+		"name": "dev"
+	}
+}

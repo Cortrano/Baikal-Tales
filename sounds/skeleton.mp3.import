@@ -1,0 +1,15 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+path="res://.import/skeleton.mp3-0456deb74b73102544bf18b5745629ca.mp3str"
+
+[deps]
+
+source_file="res://sounds/skeleton.mp3"
+dest_files=[ "res://.import/skeleton.mp3-0456deb74b73102544bf18b5745629ca.mp3str" ]
+
+[params]
+
+loop=false
+loop_offset=0

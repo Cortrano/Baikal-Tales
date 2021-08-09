@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://src/prefabs/menus/MenuButton.tscn" type="PackedScene" id=1]
+[ext_resource path="res://src/prefabs/menus/ExitToMainButton.gd" type="Script" id=2]
+
+[node name="ExitToMainButton" instance=ExtResource( 1 )]
+script = ExtResource( 2 )
+scene_to_load = "res://src/levels/menu.tscn"
+
+[node name="Label" parent="." index="0"]
+text = "Меню"
